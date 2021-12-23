@@ -1,5 +1,6 @@
 package jpabook;
 
+import jpabook.entity.Board;
 import jpabook.entity.Member;
 
 import javax.persistence.*;
@@ -9,15 +10,28 @@ public class JpaMain {
 
     public static void main(String[] args) {
 
-        
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        try {
+            tx.begin();
+            logic(em);
+            tx.commit();
+        } catch (Exception e) {
+            tx.rollback();
+        } finally {
+            em.close();
+        }
+        emf.close();
 
 //        Member member = createMember("memberA", "회원1");
 //        member.setUsername("회원명변경");
 //        mergeMember(member);
     }
 
-    private static void logic (EntityManager em){
-
+    private static void logic(EntityManager em) {
+        Board board = new Board();
+        em.persist(board);
+        System.out.println("board.id = " + board.getId());
     }
 
     private static void mergeMember(Member member) {
