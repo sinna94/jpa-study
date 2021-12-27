@@ -2,8 +2,9 @@
 <persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence" version="2.2">
     <persistence-unit name="jpabook">
         <class>jpabook.entity.Member</class>
-        <class>jpabook.entity.Board</class>
-        <class>jpabook.entity.Team</class>
+        <class>jpabook.entity.Order</class>
+        <class>jpabook.entity.OrderItem</class>
+        <class>jpabook.entity.Item</class>
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
             <property name="javax.persistence.jdbc.user" value="sa"/>

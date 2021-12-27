@@ -1,56 +1,72 @@
 package jpabook.entity;
 
-import org.hibernate.annotations.DynamicUpdate;
-
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@DynamicUpdate
+@Table(name = "member")
 public class Member {
-
     @Id
-    @Column(name = "ID")
-    private String id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
-    private String username;
+    private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "TEAM_ID")
-    private Team team;
+    private String city;
 
-    public Member() {
+    private String street;
+
+    private String zipcode;
+
+    @OneToMany(mappedBy = "member")
+    private List<Order> orders = new ArrayList<>();
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 
-    public Member(String id, String username) {
-        this.id = id;
-        this.username = username;
+    public List<Order> getOrders() {
+        return orders;
     }
 
-    public void setTeam(Team team) {
-        if(team != null){
-            this.team.getMembers().remove(this);
-        }
-        this.team = team;
-        team.getMembers().add(this);
-    }
-
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getName() {
+        return name;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Team getTeam() {
-        return team;
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public String getZipcode() {
+        return zipcode;
+    }
+
+    public void setZipcode(String zipcode) {
+        this.zipcode = zipcode;
     }
 }
