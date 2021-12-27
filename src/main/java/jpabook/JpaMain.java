@@ -1,9 +1,13 @@
 package jpabook;
 
-import jpabook.entity.Board;
 import jpabook.entity.Member;
+import jpabook.entity.Team;
 
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
+import java.util.List;
 
 public class JpaMain {
     static EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpabook");
@@ -22,58 +26,47 @@ public class JpaMain {
             em.close();
         }
         emf.close();
-
-//        Member member = createMember("memberA", "회원1");
-//        member.setUsername("회원명변경");
-//        mergeMember(member);
     }
 
     private static void logic(EntityManager em) {
-        Board board = new Board();
-        em.persist(board);
-        System.out.println("board.id = " + board.getId());
-    }
+        // 연관 관계 추가
+        Team team = new Team("team1", "Team1");
+        em.persist(team);
 
-    private static void mergeMember(Member member) {
-        // 영속성 컨텍스트2 시작
-        EntityManager em = emf.createEntityManager();
-        EntityTransaction tx = em.getTransaction();
+        Member member1 = new Member("member1", "Member1");
+        member1.setTeam(team);
+        em.persist(member1);
 
-        tx.begin();
-        Member mergeMember = em.merge(member);
-        tx.commit();
+        Member member2 = new Member("member2", "Member2");
+        member2.setTeam(team);
+        em.persist(member2);
 
-        //준 영속 상태
-        System.out.println("member=" + member.getUsername());
+        // 연관 관계 조회
+        String jpql = "select m from Member m join m.team t where t.name=:teamName";
+        List<Member> resultList = em.createQuery(jpql, Member.class)
+                .setParameter("teamName", "Team1")
+                .getResultList();
 
-        //영속 상태
-        System.out.println("mergeMember=" + mergeMember.getUsername());
+        for (Member member : resultList) {
+            System.out.println("[query] member.username=" + member.getUsername());
+            System.out.println("[query] member.teamId=" + member.getTeam().getId());
+        }
 
-        System.out.println("em contains member = " + em.contains(member));
-        System.out.println("em contains mergeMember = " + em.contains(mergeMember));
+        // 연관 관계 수정
+        Team team2 = new Team("team2", "Team2");
+        em.persist(team2);
 
-        em.close();
-        // 영속성 컨텍스트 종료
-    }
+        Member member = em.find(Member.class, "member1");
+//        member.setTeam(team2);
 
-    private static Member createMember(String id, String username) {
-        // 영속성 컨텍스트1 시작
-        EntityManager em = emf.createEntityManager();
-        EntityTransaction tx = em.getTransaction();
-        tx.begin();
+        // 연관 관계 제거
+//        member.setTeam(null);
 
-        Member member = new Member();
-        member.setId(id);
-        member.setUsername(username);
-        member.setAge(20);
-
-        em.persist(member);
-        tx.commit();
-
-        em.close();
-
-        // 영속성 컨텍스트 종료
-
-        return member;
+        // 일대다 방향으로 객체 그래프 탐색
+        Team team1 = em.find(Team.class, "team1");
+        List<Member> members = team1.getMembers();
+        for (Member m : members) {
+            System.out.println("member.username=" + m.getUsername());
+        }
     }
 }

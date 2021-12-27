@@ -3,13 +3,8 @@ package jpabook.entity;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
-@Table(name = "MEMBER", uniqueConstraints = {@UniqueConstraint(
-        name = "NAME_AGE_UNIQUE",
-        columnNames = {"NAME", "AGE"}
-)})
 @DynamicUpdate
 public class Member {
 
@@ -17,21 +12,27 @@ public class Member {
     @Column(name = "ID")
     private String id;
 
-    @Column(name = "NAME", nullable = false, length = 10)
     private String username;
-    private Integer age;
 
-    @Enumerated(EnumType.STRING)
-    private RoleType roleType;
+    @ManyToOne
+    @JoinColumn(name = "TEAM_ID")
+    private Team team;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createdDate;
+    public Member() {
+    }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date lastModifiedDate;
+    public Member(String id, String username) {
+        this.id = id;
+        this.username = username;
+    }
 
-    @Lob
-    private String description;
+    public void setTeam(Team team) {
+        if(team != null){
+            this.team.getMembers().remove(this);
+        }
+        this.team = team;
+        team.getMembers().add(this);
+    }
 
     public String getId() {
         return id;
@@ -49,43 +50,7 @@ public class Member {
         this.username = username;
     }
 
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    public RoleType getRoleType() {
-        return roleType;
-    }
-
-    public void setRoleType(RoleType roleType) {
-        this.roleType = roleType;
-    }
-
-    public Date getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public Date getLastModifiedDate() {
-        return lastModifiedDate;
-    }
-
-    public void setLastModifiedDate(Date lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
+    public Team getTeam() {
+        return team;
     }
 }
