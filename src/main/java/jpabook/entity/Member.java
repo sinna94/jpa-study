@@ -30,8 +30,11 @@ public class Member {
 //            inverseJoinColumns = @JoinColumn(name = "product_id"))
 //    private List<Product> products = new ArrayList<>();
 
+//    @OneToMany(mappedBy = "member")
+//    private List<MemberProduct> memberProducts;
+
     @OneToMany(mappedBy = "member")
-    private List<MemberProduct> memberProducts;
+    private List<Order> orders = new ArrayList<>();
 
     public void setLocker(Locker locker) {
         this.locker = locker;

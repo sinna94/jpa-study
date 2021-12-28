@@ -3,20 +3,30 @@ package jpabook.entity;
 import javax.persistence.*;
 
 @Entity
-@IdClass(MemberProductId.class)
-public class MemberProduct {
-    // 복합 키
-    @Id
+@Table(name = "orders")
+public class Order {
+    // 대리키 사용
+    @Id @GeneratedValue
+    @Column(name = "order_id")
+    private Long id;
+
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @Id
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name="product_id")
     private Product product;
 
     private int orderAmount;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Member getMember() {
         return member;

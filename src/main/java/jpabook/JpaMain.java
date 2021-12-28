@@ -38,19 +38,27 @@ public class JpaMain {
         product.setName("product1");
         em.persist(product);
 
-        MemberProduct memberProduct = new MemberProduct();
-        memberProduct.setMember(member1);
-        memberProduct.setProduct(product);
-        memberProduct.setOrderAmount(2);
-        em.persist(memberProduct);
+//        MemberProduct memberProduct = new MemberProduct();
+//        memberProduct.setMember(member1);
+//        memberProduct.setProduct(product);
+//        memberProduct.setOrderAmount(2);
+//        em.persist(memberProduct);
+        Order order = new Order();
+        order.setMember(member1);
+        order.setProduct(product);
+        order.setOrderAmount(2);
+        em.persist(order);
 
         em.flush();
 
-        MemberProductId memberProductId = new MemberProductId();
-        memberProductId.setMember("member1");
-        memberProductId.setProduct("product1");
-        MemberProduct findMemberProduct = em.find(MemberProduct.class, memberProductId);
-        System.out.println(findMemberProduct.getMember().getUsername());
+        Long orderId = 1L;
+        Order findOrder = em.find(Order.class, orderId);
+
+        System.out.println(findOrder.getMember().getUsername());
+//        MemberProductId memberProductId = new MemberProductId();
+//        memberProductId.setMember("member1");
+//        memberProductId.setProduct("product1");
+//        MemberProduct findMemberProduct = em.find(MemberProduct.class, memberProductId);
+//        System.out.println(findMemberProduct.getMember().getUsername());
     }
 }
-   
