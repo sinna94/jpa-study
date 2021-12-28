@@ -4,6 +4,9 @@
         <class>jpabook.entity.Member</class>
         <class>jpabook.entity.Board</class>
         <class>jpabook.entity.Team</class>
+        <class>jpabook.entity.Locker</class>
+        <class>jpabook.entity.Product</class>
+        <class>jpabook.entity.MemberProduct</class>
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
             <property name="javax.persistence.jdbc.user" value="sa"/>
